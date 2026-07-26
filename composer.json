@@ -11,10 +11,14 @@
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.8",
+        "laravel/sanctum": "^4.0",
         "laravel/tinker": "^3.0"
     },
     "require-dev": {
+        "captainhook/captainhook": "^5.29",
+        "captainhook/captainhook-phar": "^5.29",
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.10",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.0.6",
         "laravel/pint": "^1.27",
@@ -81,6 +85,7 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
+            "captainhook/captainhook-phar": true,
             "pestphp/pest-plugin": true,
             "php-http/discovery": true
         }
