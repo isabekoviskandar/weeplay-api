@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
@@ -15,4 +16,9 @@ class Category extends Model
     protected $casts = [
         'name' => 'array',
     ];
+
+    public function venues(): HasMany
+    {
+        return $this->hasMany(Venue::class);
+    }
 }
