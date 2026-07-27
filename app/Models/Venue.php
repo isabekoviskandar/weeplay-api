@@ -35,4 +35,9 @@ class Venue extends Model
     {
         return $this->hasMany(VenueImage::class);
     }
+
+    public function slots(): HasMany
+    {
+        return $this->hasMany(VenueSlot::class);
+    }
 }
