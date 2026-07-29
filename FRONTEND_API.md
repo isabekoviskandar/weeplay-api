@@ -307,6 +307,92 @@ GET /v1/slot/get-by-venue/{id}
 GET /v1/slot/get-by-category/{id}
 ```
 
+
+
+All user endpoints require a bearer token and operate on the current authenticated user.
+
+### Get my profile
+
+`GET /v1/user/me`
+
+```js
+const response = await fetch(`${API_URL}/v1/user/me`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
+const { user } = await response.json();
+```
+
+Response: `{ "user": User }`.
+
+### Update my profile
+
+`PUT /v1/user/update-profile`
+
+All fields are optional. Use `multipart/form-data` when changing `image` or `cover_image`. Existing image files are replaced when a new file is sent.
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `username` | string | Maximum 255 characters |
+| `phone` | string | Maximum 30 characters; must be unique |
+| `email` | email | Must be unique |
+| `bio` | string or `null` | Send an empty value to clear it |
+| `password` | string | Optional new password; minimum 8 characters |
+| `image` | image file or `null` | JPG, JPEG, PNG, or WEBP; maximum 10 MB |
+| `cover_image` | image file or `null` | JPG, JPEG, PNG, or WEBP; maximum 10 MB |
+
+```js
+const data = new FormData();
+data.append('username', 'Jane Doe');
+data.append('phone', '+998901234567');
+data.append('bio', 'Football player and organizer');
+if (avatarFile) data.append('image', avatarFile);
+if (coverFile) data.append('cover_image', coverFile);
+
+const response = await fetch(`${API_URL}/v1/user/update-profile`, {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${token}`,
+    'X-HTTP-Method-Override': 'PUT',
+  },
+  body: data,
+});
+
+const { user } = await response.json();
+```
+
+The method override keeps multipart file uploads compatible with PHP. For profile updates without files, a normal JSON `PUT` request is also supported.
+
+```js
+await fetch(`${API_URL}/v1/user/update-profile`, {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
+  body: JSON.stringify({ bio: 'Football player and organizer' }),
+});
+```
+
+Response: `200 OK`, `{ "message": "Profile updated successfully.", "user": User }`.
+
+### My venues, slots, and bookings
+
+```text
+GET /v1/user/get-venues
+GET /v1/user/get-slots
+GET /v1/user/get-bookings
+```
+
+Each endpoint requires a bearer token and returns only the current user's records:
+
+```js
+const { venues } = await fetch(`${API_URL}/v1/user/get-venues`, {
+  headers: { Authorization: `Bearer ${token}` },
+}).then((response) => response.json());
+```
+
+Responses are `{ "venues": [Venue] }`, `{ "slots": [VenueSlot] }`, and `{ "bookings": [Booking] }` respectively.
+
 ## Bookings
 
 Booking endpoints require `Authorization: Bearer <token>`. The backend derives `user_id` from the token and derives `price` from the selected venue.
@@ -397,7 +483,7 @@ type VenueSlot = {
 
 type Booking = {
   id: number;
-  venue_id: number;
+  venue_id: nu## User profilember;
   user_id: number;
   slot_id: number | null;
   date: string;
