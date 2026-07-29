@@ -40,4 +40,9 @@ class Venue extends Model
     {
         return $this->hasMany(VenueSlot::class);
     }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
