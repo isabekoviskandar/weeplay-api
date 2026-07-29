@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingService
 {
+    public function __construct(protected TelegramBotService $telegramBot) {}
+
     public function index()
     {
         $bookings = Booking::all();
@@ -51,6 +53,8 @@ class BookingService
         $data['price'] = $venue->price;
 
         $booking = Booking::create($data);
+
+        $this->telegramBot->notifyVenueOwnerAboutBooking($venue, $booking);
 
         return response()->json([
             'booking' => $booking,

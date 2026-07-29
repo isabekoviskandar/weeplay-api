@@ -308,6 +308,7 @@ GET /v1/slot/get-by-category/{id}
 ```
 
 
+## User profile
 
 All user endpoints require a bearer token and operate on the current authenticated user.
 
@@ -324,6 +325,30 @@ const { user } = await response.json();
 
 Response: `{ "user": User }`.
 
+### Connect Telegram
+
+The profile response includes `telegram_id`.
+
+- If `user.telegram_id` is `null`, the user has not connected Telegram. Show a Telegram icon/button in both the navbar and the profile page.
+- If `user.telegram_id` has a value, the user is connected. Do not show the Telegram connection icon.
+- Clicking the button redirects the user to the Weeplay bot: [https://t.me/weeplay_bot](https://t.me/weeplay_bot).
+
+The bot asks the user to share the phone number used during Weeplay registration. When the number matches a Weeplay account, the bot saves the Telegram chat ID and the user can receive venue-owner booking notifications.
+
+```js
+const isTelegramConnected = Boolean(user.telegram_id);
+
+if (!isTelegramConnected) {
+  // Show in the navbar and profile screen.
+  telegramButton.href = 'https://t.me/weeplay_bot';
+  telegramButton.hidden = false;
+} else {
+  telegramButton.hidden = true;
+}
+```
+
+Refresh the current user (`GET /v1/user/me`) after the user returns from Telegram to update the connection state.
+
 ### Update my profile
 
 `PUT /v1/user/update-profile`
@@ -335,6 +360,7 @@ All fields are optional. Use `multipart/form-data` when changing `image` or `cov
 | `username` | string | Maximum 255 characters |
 | `phone` | string | Maximum 30 characters; must be unique |
 | `email` | email | Must be unique |
+| `telegram_id` | integer or `null` | Managed by the Telegram bot after phone verification; do not set this from the frontend |
 | `bio` | string or `null` | Send an empty value to clear it |
 | `password` | string | Optional new password; minimum 8 characters |
 | `image` | image file or `null` | JPG, JPEG, PNG, or WEBP; maximum 10 MB |
@@ -483,7 +509,7 @@ type VenueSlot = {
 
 type Booking = {
   id: number;
-  venue_id: nu## User profilember;
+  venue_id: number;
   user_id: number;
   slot_id: number | null;
   date: string;
