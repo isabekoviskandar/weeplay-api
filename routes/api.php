@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\VenueSlotController;
 use Illuminate\Http\Request;
@@ -47,6 +48,14 @@ Route::prefix('v1')->group(function () {
         Route::prefix('booking')->group(function () {
             Route::get('get-by-user', [BookingController::class, 'getBookingByUser']);
             Route::post('create', [BookingController::class, 'create']);
+        });
+
+        Route::prefix('user')->group(function () {
+            Route::get('me', [UserController::class, 'me']);
+            Route::put('update-profile', [UserController::class, 'updateProfile']);
+            Route::get('get-venues', [UserController::class, 'getUserVenues']);
+            Route::get('get-slots', [UserController::class, 'getUserSlots']);
+            Route::get('get-bookings', [UserController::class, 'getUserBookings']);
         });
     });
 });
