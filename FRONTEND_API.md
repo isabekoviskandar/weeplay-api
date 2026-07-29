@@ -307,6 +307,57 @@ GET /v1/slot/get-by-venue/{id}
 GET /v1/slot/get-by-category/{id}
 ```
 
+## Bookings
+
+Booking endpoints require `Authorization: Bearer <token>`. The backend derives `user_id` from the token and derives `price` from the selected venue.
+
+### Create a booking
+
+`POST /v1/booking/create`
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `venue_id` | integer | Yes | Venue ID |
+| `slot_id` | integer | No | Venue slot ID |
+| `date` | `YYYY-MM-DD` | Yes | Booking date |
+| `from_time` | time | Yes | Example: `09:00` |
+| `to_time` | time | Yes | Example: `10:00` |
+
+```js
+const response = await fetch(`${API_URL}/v1/booking/create`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  },
+  body: JSON.stringify({
+    venue_id: 1,
+    slot_id: 5,
+    date: '2026-08-01',
+    from_time: '09:00',
+    to_time: '10:00',
+  }),
+});
+
+const { booking } = await response.json();
+```
+
+Response: `200 OK`, `{ "booking": Booking }`.
+
+### My bookings
+
+`GET /v1/booking/get-by-user`
+
+```js
+const response = await fetch(`${API_URL}/v1/booking/get-by-user`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
+
+const { bookings } = await response.json();
+```
+
+Response: `200 OK`, `{ "bookings": [Booking] }`.
+
 ## Object shapes
 
 ```ts
@@ -342,6 +393,20 @@ type VenueSlot = {
   end_time: string;
   price: string;
   status: string;
+};
+
+type Booking = {
+  id: number;
+  venue_id: number;
+  user_id: number;
+  slot_id: number | null;
+  date: string;
+  from_time: string;
+  to_time: string;
+  price: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
 };
 ```
 
