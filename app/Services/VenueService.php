@@ -60,7 +60,7 @@ class VenueService
         DB::transaction(function () use ($data, $request) {
 
             $venue = Venue::create([
-                'user_id' => Auth::id(),
+                'user_id' => 1,
                 'category_id' => $data['category_id'],
                 'name' => $data['name'],
                 'address' => $data['address'],

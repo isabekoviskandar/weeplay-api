@@ -56,7 +56,7 @@ class SlotService
             'price' => 'required',
         ]);
 
-        $data['user_id'] = Auth::id();
+        $data['user_id'] = 1;
 
         $slot = VenueSlot::create($data);
 

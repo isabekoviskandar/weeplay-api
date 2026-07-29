@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\VenueController;
 use App\Http\Controllers\VenueSlotController;
@@ -11,6 +12,12 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::prefix('v1')->group(function () {
+    Route::prefix('auth')->group(function () {
+        Route::post('register', [AuthController::class, 'register']);
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    });
+
     Route::prefix('category')->group(function () {
         Route::get('index', [CategoryController::class, 'index']);
         Route::post('create', [CategoryController::class, 'create']);
