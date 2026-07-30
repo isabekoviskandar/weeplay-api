@@ -173,4 +173,20 @@ class VenueService
             'message' => 'Venue deleted successfully.',
         ]);
     }
+
+    public function getAssets(Venue $venue)
+    {
+        $assets = $venue->images->map(function (VenueImage $image) {
+            return [
+                'id' => $image->id,
+                'type' => 'image',
+                'url' => asset("storage/{$image->image}"),
+                'path' => $image->image,
+            ];
+        });
+
+        return response()->json([
+            'assets' => $assets,
+        ]);
+    }
 }

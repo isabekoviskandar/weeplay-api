@@ -189,6 +189,36 @@ const { venues } = await fetch(`${API_URL}/v1/vanue/index`).then((r) => r.json()
 
 Response: `{ "venues": [Venue] }`.
 
+### Get venue assets (images/files)
+
+`GET /v1/vanue/assets/{venueId}`
+
+Bearer token required.
+
+Returns only the venue's media assets, with public URLs generated from the stored paths.
+
+```js
+const response = await fetch(`${API_URL}/v1/vanue/assets/1`, {
+  headers: { Authorization: `Bearer ${token}` },
+});
+const { assets } = await response.json();
+```
+
+Response:
+
+```json
+{
+  "assets": [
+    {
+      "id": 1,
+      "type": "image",
+      "url": "http://localhost:8000/storage/venues/example.jpg",
+      "path": "venues/example.jpg"
+    }
+  ]
+}
+```
+
 ### Create a venue
 
 `POST /v1/vanue/create`

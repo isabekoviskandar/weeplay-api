@@ -35,6 +35,7 @@ Route::prefix('v1')->group(function () {
             Route::get('index', [VenueController::class, 'index']);
             Route::get('get-by-category', [VenueController::class, 'getVenueByCategory']);
             Route::get('get-by-user', [VenueController::class, 'getVenueByUser']);
+            Route::get('assets/{venue}', [VenueController::class, 'assets']);
             Route::post('create', [VenueController::class, 'create']);
             Route::put('update/{id}', [VenueController::class, 'update']);
             Route::delete('delete/{id}', [VenueController::class, 'destroy']);

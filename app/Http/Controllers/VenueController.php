@@ -44,4 +44,9 @@ class VenueController extends Controller
     {
         return $this->service->destroy($venue);
     }
+
+    public function assets(Venue $venue)
+    {
+        return $this->service->getAssets($venue);
+    }
 }
