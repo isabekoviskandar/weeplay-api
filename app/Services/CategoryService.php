@@ -75,4 +75,13 @@ class CategoryService
             'message' => 'Category deleted successfully.',
         ], 200);
     }
+
+    public function getLatestCategories()
+    {
+        $categories = Category::latest()->take(6)->get();
+
+        return response()->json([
+            'categories' => $categories,
+        ]);
+    }
 }
