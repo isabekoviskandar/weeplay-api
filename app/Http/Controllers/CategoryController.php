@@ -33,4 +33,9 @@ class CategoryController extends Controller
     {
         return $this->service->destroy($id);
     }
+
+    public function getLatestCategories()
+    {
+        return $this->service->getLatestCategories();
+    }
 }

@@ -189,4 +189,13 @@ class VenueService
             'assets' => $assets,
         ]);
     }
+
+    public function getLatestVenues()
+    {
+        $venues = Venue::latest()->take(6)->get();
+
+        return response()->json([
+            'venues' => $venues,
+        ]);
+    }
 }

@@ -22,6 +22,8 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
         Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     });
+    Route::get('get-latest-venues', [VenueController::class, 'getLatestVenues']);
+    Route::get('get-latest-categories', [CategoryController::class, 'getLatestCategories']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::prefix('category')->group(function () {
@@ -31,7 +33,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('delete/{id}', [CategoryController::class, 'destroy']);
         });
 
-        Route::prefix('vanue')->group(function () {
+        Route::prefix('venue')->group(function () {
             Route::get('index', [VenueController::class, 'index']);
             Route::get('get-by-category', [VenueController::class, 'getVenueByCategory']);
             Route::get('get-by-user', [VenueController::class, 'getVenueByUser']);
