@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 class HandleCors
 {
@@ -25,15 +25,14 @@ class HandleCors
 
         // Handle preflight requests
         if ($request->getMethod() === 'OPTIONS') {
-            $responseCode = in_array($origin, $allowedOrigins) ? 204 : 403;
-            $response = response('', $responseCode);
+            $response = new Response('', 204);
 
-            if (in_array($origin, $allowedOrigins)) {
-                $response->header('Access-Control-Allow-Origin', $origin);
-                $response->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-                $response->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
-                $response->header('Access-Control-Allow-Credentials', 'true');
-                $response->header('Access-Control-Max-Age', '86400');
+            if ($origin && in_array($origin, $allowedOrigins)) {
+                $response->headers->set('Access-Control-Allow-Origin', $origin);
+                $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+                $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+                $response->headers->set('Access-Control-Allow-Credentials', 'true');
+                $response->headers->set('Access-Control-Max-Age', '86400');
             }
 
             return $response;
@@ -41,7 +40,8 @@ class HandleCors
 
         $response = $next($request);
 
-        if (in_array($origin, $allowedOrigins)) {
+        // Add CORS headers to actual response
+        if ($origin && in_array($origin, $allowedOrigins)) {
             $response->headers->set('Access-Control-Allow-Origin', $origin);
             $response->headers->set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
             $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
