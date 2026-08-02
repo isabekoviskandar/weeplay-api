@@ -49,4 +49,9 @@ class VenueController extends Controller
     {
         return $this->service->getAssets($venue);
     }
+
+    public function getLatestVenues()
+    {
+        return $this->service->getLatestVenues();
+    }
 }
