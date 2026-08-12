@@ -20,6 +20,7 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::post('login', [AuthController::class, 'login']);
+        Route::post('telegram', [AuthController::class, 'telegram'])->middleware('throttle:10,1');
         Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
     });
 
