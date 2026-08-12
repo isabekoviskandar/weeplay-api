@@ -19,6 +19,11 @@ class AuthController extends Controller
         return $this->service->login($request);
     }
 
+    public function telegram(Request $request)
+    {
+        return $this->service->telegram($request);
+    }
+
     public function logout(Request $request)
     {
         return $this->service->logout($request);
