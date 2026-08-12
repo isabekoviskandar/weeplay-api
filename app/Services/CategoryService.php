@@ -40,7 +40,7 @@ class CategoryService
         $category = Category::findOrFail($id);
 
         $data = $request->validate([
-            'name' => 'required|string',
+            'name' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,svg|max:10240',
         ]);
 

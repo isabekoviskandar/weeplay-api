@@ -18,6 +18,7 @@ return [
     'allowed_origins' => [
         'http://localhost:5173',
         'https://api.weeplay.isabekoff.uz',
+        'https://weeplay.isabekoff.uz',
     ],
 
     'allowed_origins_patterns' => [],
